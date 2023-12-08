@@ -1,0 +1,41 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool: 
+  name: AGENTE_GONZALO
+  demands:
+  - agent.name -equals GONZALO
+
+stages:
+- stage: Preparation
+  jobs:
+  - job: PreparationJob
+    steps:
+    - script: echo Preparation!
+
+- stage: Build
+  jobs:
+  - job: BuildJob
+    steps:
+        - checkout: none
+        - script: echo Building!
+
+- stage: Sonarqube
+  jobs:
+  - job: SonarqubeJob
+    steps:
+    - checkout: none
+    - script: sonar-scanner -D sonar.token=$(SQ_TOKEN)
+    - script: echo Sonarqube ok!
+
+- stage: Deployment
+  jobs:
+  - job: DeploymentJob
+    steps:
+    - checkout: none
+    - script: echo Deployed!

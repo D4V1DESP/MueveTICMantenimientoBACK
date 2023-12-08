@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    azure:
+      active-directory:
+        b2c:
+          enabled: true
+          base-uri: https://iso2023.b2clogin.com/iso2023.onmicrosoft.com/
+          credential:
+            client-id: 260c3a22-50ec-44b6-bb30-15621f971935
+            client-secret: 'Vkq8Q~x2aPfXPd0gIbsJgPmoteYuIrfB1ZYliaFn'
+          user-flows:
+            sign-up-or-sign-in: B2C_1_test
+            profile-edit: 
+            - B2C_1_update 
+            - B2C_1_updateadmin
+            password-reset:
+            - B2C_1_pass
+            - B2C_1_passadmin
+          user-name-attribute-name: sub
+          user-group:
+            allowed-groups: administradores, mantenimiento
