@@ -17,11 +17,13 @@ import com.microsoft.graph.models.User;
 
 import iso.muevetic.domain.AdminModel;
 import iso.muevetic.domain.MaintenanceStaffModel;
+import iso.muevetic.domain.TelephoneAttentionModel;
 import iso.muevetic.domain.UserUpdateModel;
 import iso.muevetic.entities.Admin;
 import iso.muevetic.entities.GenericUser;
 import iso.muevetic.entities.MaintenanceStaff;
 import iso.muevetic.entities.SystemConfig;
+import iso.muevetic.entities.TelephoneAttention;
 import iso.muevetic.exceptions.ConflictInDBException;
 import iso.muevetic.exceptions.NotFoundException;
 import jakarta.validation.Valid;
@@ -109,6 +111,37 @@ public class AdminsService {
 		
 		return staff.getId();
 	}
+	
+
+	public String createTelephoneAttention(AdminModel telephoneAttentionModel) throws ConflictInDBException {
+		
+		PasswordProfile passwordProfile = new PasswordProfile();
+		passwordProfile.forceChangePasswordNextSignIn = false;
+		passwordProfile.password = telephoneAttentionModel.getPassword();
+		
+		SystemConfig config = this.configService.getConfig();
+		
+		System.out.println(telephoneAttentionModel + config.gettelephoneAttentionRoleID());
+		TelephoneAttention telephoneAttention = this.modelMapper.map(telephoneAttentionModel, TelephoneAttention.class, config.gettelephoneAttentionRoleID());
+		telephoneAttention.setRole(config.gettelephoneAttentionRoleID());
+		
+		com.microsoft.graph.models.User azureTelephoneAttention = telephoneAttention.toAzureUser();
+		azureTelephoneAttention.accountEnabled = true;
+		azureTelephoneAttention.passwordProfile = passwordProfile;
+		
+		try {
+			com.microsoft.graph.models.User azureAdded = graphClient.users().buildRequest().post(azureTelephoneAttention);
+			graphClient.groups(config.gettelephoneAttentionRoleID()).members().references().buildRequest().post(azureAdded);
+			telephoneAttention = new TelephoneAttention(azureAdded);
+		} catch (ClientException e) {
+			e.printStackTrace();
+			throw new ConflictInDBException();
+		}
+		
+		return telephoneAttention.getId();
+		
+	}
+
 
 	public void blockUser(String id) throws ConflictInDBException {
 		User user = new User();
@@ -242,5 +275,4 @@ public class AdminsService {
 			throw new NotFoundException();
 		}
 	}
-
 }

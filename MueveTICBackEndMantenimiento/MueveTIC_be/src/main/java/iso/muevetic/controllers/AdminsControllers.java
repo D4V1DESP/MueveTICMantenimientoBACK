@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import iso.muevetic.domain.AdminModel;
 import iso.muevetic.domain.ConfigModel;
 import iso.muevetic.domain.MaintenanceStaffModel;
+import iso.muevetic.domain.TelephoneAttentionModel;
 import iso.muevetic.domain.UserUpdateModel;
 import iso.muevetic.entities.GenericUser;
 import iso.muevetic.entities.SystemConfig;
@@ -52,6 +53,15 @@ public class AdminsControllers {
 	public void createMaintenance(@Valid @RequestBody MaintenanceStaffModel maintenanceStaffModel) {
 		try {
 			this.adminsService.createMaintenanceStaff(maintenanceStaffModel);
+		} catch (ConflictInDBException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		}
+	}
+	
+	@PostMapping("/createTelephoneAttention/")
+	public void createMaintenance(@Valid @RequestBody AdminModel telephoneAttentionModel) {
+		try {
+			this.adminsService.createTelephoneAttention(telephoneAttentionModel);
 		} catch (ConflictInDBException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT);
 		}

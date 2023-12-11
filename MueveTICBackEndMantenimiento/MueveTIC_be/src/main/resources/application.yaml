@@ -18,4 +18,4 @@ spring:
             - B2C_1_passadmin
           user-name-attribute-name: sub
           user-group:
-            allowed-groups: administradores, mantenimiento
+            allowed-groups: administradores, mantenimiento, atencion Telefonica

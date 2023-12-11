@@ -28,6 +28,7 @@ import iso.muevetic.entities.Admin;
 import iso.muevetic.entities.GenericUser;
 import iso.muevetic.entities.MaintenanceStaff;
 import iso.muevetic.entities.SystemConfig;
+import iso.muevetic.entities.TelephoneAttention;
 import iso.muevetic.entities.User;
 import iso.muevetic.services.ConfigService;
 
@@ -70,6 +71,9 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 		    	} else if (role.equals(config.getMaintenanceStaffRoleId())) {
 		    		generic = new MaintenanceStaff(user);
 					request.setAttribute("maintenance", generic);
+		    	} else if (role.equals(config.gettelephoneAttentionRoleID())) {
+		    		generic = new TelephoneAttention(user);
+					request.setAttribute("telephoneAttention", generic);
 		    	} else {
 		    		generic = new User(user);
 					request.setAttribute("user", generic);

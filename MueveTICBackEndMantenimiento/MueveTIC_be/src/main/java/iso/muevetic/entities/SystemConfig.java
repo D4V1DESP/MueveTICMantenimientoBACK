@@ -18,6 +18,8 @@ public class SystemConfig {
 	private String adminRoleId;
 	@JsonIgnore
     private String maintenanceStaffRoleId;
+	@JsonIgnore
+	private String telephoneAttentionRoleID;
     
     //SecurityConfig 
 	@JsonIgnore
@@ -47,6 +49,10 @@ public class SystemConfig {
 
 	public String getMaintenanceStaffRoleId() {
 		return maintenanceStaffRoleId;
+	}
+
+	public String gettelephoneAttentionRoleID() {
+		return telephoneAttentionRoleID;
 	}
 
 	public String getClientId() {
