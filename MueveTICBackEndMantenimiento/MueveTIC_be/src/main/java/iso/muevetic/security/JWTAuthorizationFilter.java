@@ -73,7 +73,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 					request.setAttribute("maintenance", generic);
 		    	} else if (role.equals(config.gettelephoneAttentionRoleID())) {
 		    		generic = new TelephoneAttention(user);
-					request.setAttribute("telephoneAttention", generic);
+					request.setAttribute("telephoneattention", generic);
 		    	} else {
 		    		generic = new User(user);
 					request.setAttribute("user", generic);

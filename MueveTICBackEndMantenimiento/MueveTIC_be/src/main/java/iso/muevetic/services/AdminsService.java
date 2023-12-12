@@ -104,6 +104,7 @@ public class AdminsService {
 			com.microsoft.graph.models.User azureAdded = graphClient.users().buildRequest().post(azureStaff);
 			graphClient.groups(config.getMaintenanceStaffRoleId()).members().references().buildRequest().post(azureAdded);
 			staff = new MaintenanceStaff(azureAdded);
+			System.out.println("Rol en staff" + staff.getRole());
 		} catch (ClientException e) {
 			e.printStackTrace();
 			throw new ConflictInDBException();
@@ -119,9 +120,7 @@ public class AdminsService {
 		passwordProfile.forceChangePasswordNextSignIn = false;
 		passwordProfile.password = telephoneAttentionModel.getPassword();
 		
-		SystemConfig config = this.configService.getConfig();
-		
-		System.out.println(telephoneAttentionModel + config.gettelephoneAttentionRoleID());
+		SystemConfig config = this.configService.getConfig();		
 		TelephoneAttention telephoneAttention = this.modelMapper.map(telephoneAttentionModel, TelephoneAttention.class, config.gettelephoneAttentionRoleID());
 		telephoneAttention.setRole(config.gettelephoneAttentionRoleID());
 		
@@ -133,6 +132,7 @@ public class AdminsService {
 			com.microsoft.graph.models.User azureAdded = graphClient.users().buildRequest().post(azureTelephoneAttention);
 			graphClient.groups(config.gettelephoneAttentionRoleID()).members().references().buildRequest().post(azureAdded);
 			telephoneAttention = new TelephoneAttention(azureAdded);
+			System.out.println("Rol en telephone attention" + telephoneAttention.getRole());
 		} catch (ClientException e) {
 			e.printStackTrace();
 			throw new ConflictInDBException();
@@ -183,6 +183,9 @@ public class AdminsService {
 				generic = new Admin(user);
 	    	} else if (role.equals(config.getMaintenanceStaffRoleId())) {
 	    		generic = new MaintenanceStaff(user);
+	    		
+	    	} else if (role.equals(config.gettelephoneAttentionRoleID())) {
+		    		generic = new TelephoneAttention(user);
 	    	} else {
 	    		generic = new iso.muevetic.entities.User(user);
 	    	}
@@ -232,6 +235,17 @@ public class AdminsService {
 	    		DirectoryObject user = group.get(i);
 	    		buf.add(new MaintenanceStaff((com.microsoft.graph.models.User) user));
 	    	}
+	    	
+	    	group = graphClient.groups(config.gettelephoneAttentionRoleID())
+		    		.members()
+		    		.buildRequest()
+		    		.select(USER_SELECT_QUERY_ATTRIBUTE)
+		    		.get().getCurrentPage();
+		    	
+		    	for (int i = 0; i < group.size(); i++) {
+		    		DirectoryObject user = group.get(i);
+		    		buf.add(new TelephoneAttention((com.microsoft.graph.models.User) user));
+		    	}
 
 	    	List<com.microsoft.graph.models.User> all = this.graphClient.users().buildRequest().select(USER_SELECT_QUERY_ATTRIBUTE).get().getCurrentPage();
 	    	
