@@ -289,4 +289,26 @@ public class AdminsService {
 			throw new NotFoundException();
 		}
 	}
+	
+	
+	public GenericUser getUsersByMail(String mail) {
+		ArrayList<GenericUser> buf = new ArrayList<>();
+
+	    	List<com.microsoft.graph.models.User> all = this.graphClient.users().buildRequest().select(USER_SELECT_QUERY_ATTRIBUTE).get().getCurrentPage();
+	    	
+	    	for (int i = 0; i < all.size(); i++) {
+	    		iso.muevetic.entities.User generic = new iso.muevetic.entities.User(all.get(i));
+	    		if (!buf.contains(generic)) {
+	    			buf.add(generic);
+	    		}
+	    	}
+
+	    	for (int i =0 ;i< buf.size(); i++) {
+	    		if (buf.get(i).getEmail().equals(mail)) {
+	    			return buf.get(i);
+	    		}
+	    	}
+				
+			return null;
+	}
 }
