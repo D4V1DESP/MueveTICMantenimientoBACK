@@ -35,7 +35,7 @@ import jakarta.validation.Valid;
 
 @Service
 public class VehiclesService {
-	
+
 	@Autowired
 	CarRepository carRepository;
 
@@ -228,4 +228,7 @@ public class VehiclesService {
 		this.reserveRepository.save(reserve);
 	}
 
+	public List<Reserve> getAllReserves() {
+		return this.reserveRepository.findAll();
+	}
 }

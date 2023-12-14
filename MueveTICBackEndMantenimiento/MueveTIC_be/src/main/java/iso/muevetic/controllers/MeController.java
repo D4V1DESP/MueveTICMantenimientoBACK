@@ -67,6 +67,15 @@ public class MeController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/reserved/allReserve")
+	public List<Reserve> getAllReserves(){
+		try {
+			return this.vehiclesService.getAllReserves();
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+	}
 
 	@PostMapping("/reserve/{licensePlate}")
 	public Reserve postReserve(@RequestAttribute User user, @PathVariable String licensePlate) {
