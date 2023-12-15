@@ -48,7 +48,7 @@ public class SecurityConfig {
     			.disable()
     		.authorizeHttpRequests()
     			.requestMatchers("/admins/**")
-    			.hasAuthority(UserRole.ADMIN.name())
+    			.hasAnyAuthority(UserRole.ADMIN.name(),UserRole.TELEPHONEATTENTION.name())
     			.and()
         	.authorizeHttpRequests()
     			.requestMatchers(HttpMethod.GET, "/me/")

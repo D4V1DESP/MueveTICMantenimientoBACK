@@ -1,6 +1,7 @@
 package iso.muevetic.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,9 +79,22 @@ public class MeController {
 	}
 
 	@PostMapping("/reserve/{licensePlate}")
-	public Reserve postReserve(@RequestAttribute User user, @PathVariable String licensePlate) {
+	public Reserve postReserve(@RequestAttribute GenericUser user, @PathVariable String licensePlate) {
 		try {
 			return this.vehiclesService.newReserve(user.getId(), licensePlate);
+		} catch (NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		} catch (ConflictInDBException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		} catch (NotAllowedException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+		}
+	}
+	
+	@PostMapping("/reserveAttT/{licensePlate}")
+	public Reserve postReserveAttT(@RequestBody Map<String,Object>info ,@PathVariable String licensePlate) {
+		try {
+			return this.vehiclesService.newReserve(info.get("id").toString(), licensePlate);
 		} catch (NotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		} catch (ConflictInDBException e) {
