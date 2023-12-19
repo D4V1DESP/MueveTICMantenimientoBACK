@@ -59,6 +59,14 @@ public class MeController {
 		}
 	}
 	
+	@DeleteMapping("reserved/cancelTelefonica/{idUsuario}")
+	public void deleteReserve(@PathVariable String idUsuario) {
+		try {
+			this.vehiclesService.setReserveStateFromUser(idUsuario, ReserveState.CANCELADA);
+		} catch (NotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+	}
 	@PatchMapping("/reserved/finalize")
 	public void finalizeReserve(@RequestAttribute User user, @Valid @RequestBody RateModel rateModel) {
 		try {
