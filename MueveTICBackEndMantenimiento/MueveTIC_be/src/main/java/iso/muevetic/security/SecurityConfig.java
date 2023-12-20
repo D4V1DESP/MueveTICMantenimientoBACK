@@ -34,6 +34,7 @@ public class SecurityConfig {
 
 	@Value("${frontend.url}")
 	private String frontend;
+
 	
 	@Autowired 
 	private AadB2cOidcLoginConfigurer configurer;
